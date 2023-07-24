@@ -34,12 +34,8 @@ async function submitNewStory(evt){
 
   $allStoriesList.prepend($story)
 }
+
 $submitForm.on("submit", submitNewStory)
-
-
-
-
-
 
 function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
@@ -83,12 +79,44 @@ function putStoriesOnPage() {
   }
 
   $allStoriesList.show();
+
+  // Update the favorites tab in the navbar
+  updateFavoritesTab();
 }
+
+function updateFavoritesTab() {
+  $favoriteStories.empty();
+
+  if (currentUser) {
+    for (let story of currentUser.favorites) {
+      const $story = generateStoryMarkup(story);
+      $favoriteStories.append($story);
+    }
+  }
+}
+
+// Event listener for marking stories as favorites
+$body.on("click", ".star", async function(evt) {
+  const favId = evt.target.id;
+  const favorStory = storyList.find((s) => s.storyId === favId);
+  const $star = $(evt.target);
+
+  if (currentUser.isFavorite(favorStory)) {
+    await currentUser.removeFavorite(favorStory);
+    $star.text('add favorite');
+  } else {
+    await currentUser.addFavorite(favorStory);
+    $star.text('⭐️');
+  }
+
+  // Update the favorites tab in the navbar after marking as favorite
+  updateFavoritesTab();
+});
 
 function removeStory(story) {
   storyList = storyList.filter((s) => s.storyId !== story.storyId);
 
   $(`#${story.storyId}`).remove();
 
-  StoryList.removeStory(currentUser, story)
+  StoryList.removeStory(currentUser, story);
 }

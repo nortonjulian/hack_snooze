@@ -35,7 +35,8 @@ function handleFavorite(evt){
     $star.text('add favorite');
   } else {
     currentUser.addFavorite(favorStory)
-  } $star.text('⭐️');
+    $star.text('⭐️');
+  }
 }
 
 
@@ -62,7 +63,9 @@ async function start() {
   await getAndShowStoriesOnStart();
 
   // if we got a logged-in user
-  if (currentUser) updateUIOnUserLogin();
+  if (currentUser) {
+    updateUIOnUserLogin();
+  }
 }
 
 // Once the DOM is entirely loaded, begin the app

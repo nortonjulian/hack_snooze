@@ -224,7 +224,7 @@ class User {
     console.log(method)
     console.log(token)
     await axios({
-      url: `${BASE_URL}/stories/user/${this.username}/favorites/${story.storyId}`,
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: method,
       data: { token }
     })
