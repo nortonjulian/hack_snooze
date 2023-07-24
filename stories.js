@@ -7,6 +7,7 @@ let storyList;
 
 async function getAndShowStoriesOnStart() {
   storyList = await StoryList.getStories();
+  storyList = storyList.stories;
   $storiesLoadingMsg.remove();
 
   putStoriesOnPage();
@@ -52,7 +53,7 @@ function generateStoryMarkup(story) {
         <small class="story-hostname">(${hostName})</small>
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
-        <small class="story-user">favorites<a href="/addFavorite">addOrRemoveFavorite</a></small>
+        <small class="star" id="${story.storyId}">add favorite</small>
       </li>
     `);
 }
@@ -65,7 +66,7 @@ function putStoriesOnPage() {
   $allStoriesList.empty();
 
   // loop through all of our stories and generate HTML for them
-  for (let story of storyList.stories) {
+  for (let story of storyList) {
     const $story = generateStoryMarkup(story);
 
     // Check if the story is a favorite for the logged-in user
@@ -85,5 +86,9 @@ function putStoriesOnPage() {
 }
 
 function removeStory(story) {
+  storyList = storyList.filter((s) => s.storyId !== story.storyId);
 
+  $(`#${story.storyId}`).remove();
+
+  StoryList.removeStory(currentUser, story)
 }

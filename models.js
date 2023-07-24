@@ -44,7 +44,7 @@ class StoryList {
    *
    *  - calls the API
    *  - builds an array of Story instances
-   *  - makes a single StoryList instance out of that
+   *  - makes a single  instance out of that
    *  - returns the StoryList instance.
    */
 
@@ -215,16 +215,32 @@ class User {
 
   async removeFavorite(story) {
     this.favorites = this.favorites.filter(s => s.storyId !== story.storyId)
-    await this._removeFavorite("remove", story)
+    await this._addOrRemoveFavorite("remove", story)
   }
 
   async _addOrRemoveFavorite(newState, story) {
-    const method = newState === "add" ? "POST" : DELETE;
+    const method = newState === "add" ? "POST" : "DELETE";
     const token = this.loginToken;
+    console.log(method)
+    console.log(token)
     await axios({
       url: `${BASE_URL}/stories/user/${this.username}/favorites/${story.storyId}`,
       method: method,
       data: { token }
     })
+  }
+
+  async _removeFavorite(newState, story) {
+    const method = newState === "add" ? "POST" : "DELETE";
+    const token = this.loginToken;
+    await axios({
+      url: `${BASE_URL}/stories/user/${this.username}/favorites/${story.storyId}`,
+      method: method,
+      data: { token }
+    });
+  }
+
+  isFavorite(story) {
+    return this.favorites.some(s => (s.storyId === story.storyId));
   }
 }

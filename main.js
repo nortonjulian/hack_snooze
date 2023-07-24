@@ -6,6 +6,10 @@ const $body = $("body");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
 const $allStoriesList = $("#all-stories-list");
+const $favoriteStories = $(".star");
+const $myStories = $("#my-stories");
+
+const $storiesLists = $(".stories-list");
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
@@ -20,6 +24,23 @@ const $navLogOut = $("#nav-logout");
  * is a useful function that hides pretty much everything on the page. After
  * calling this, individual components can re-show just what they want.
  */
+
+function handleFavorite(evt){
+  const favId = evt.target.id
+  const favorStory = storyList.find( s => s.storyId === favId)
+  const $star = $(evt.target)
+
+  if (currentUser.isFavorite(favorStory)) {
+    currentUser.removeFavorite(favorStory);
+    $star.text('add favorite');
+  } else {
+    currentUser.addFavorite(favorStory)
+  } $star.text('⭐️');
+}
+
+
+$body.on("click", ".star", handleFavorite)
+
 
 function hidePageComponents() {
   const components = [

@@ -41,7 +41,7 @@ function navFavoritesClick(evt) {
   hidePageComponents();
 }
 
-$body.on("click", "nav-favorites", navFavoritesClick)
+$body.on("click", "#nav-favorites", navFavoritesClick)
 
 
 /** When a user first logins in, update the navbar to reflect that. */
