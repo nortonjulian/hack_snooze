@@ -43,7 +43,7 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
-  return $(`
+  const $story = $(`
       <li id="${story.storyId}">
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -54,6 +54,12 @@ function generateStoryMarkup(story) {
         <small class="star" id="${story.storyId}">add favorite</small>
       </li>
     `);
+
+    if (currentUser && currentUser.ownsStory(story)) {
+      $story.append('<span class="remove-story">remove</span>');
+    }
+
+    return $story;
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */

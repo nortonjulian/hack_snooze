@@ -70,6 +70,16 @@ async function start() {
   }
 }
 
+$body.on("click", ".remove-story", async function(evt) {
+  const $story = $(evt.target).closest("li");
+  const storyId = $story.attr("id");
+  const story = storyList.find((s) => s.storyId === storyId);
+
+  if (story) {
+    await removeStory(story)
+  }
+});
+
 // Once the DOM is entirely loaded, begin the app
 
 console.warn("HEY STUDENT: This program sends many debug messages to" +
