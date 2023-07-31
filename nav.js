@@ -62,3 +62,10 @@ function showAddStoryForm() {
 }
 
 $navSubmitStory.on("click", showAddStoryForm)
+
+function handleFormSubmission(evt) {
+  evt.preventDefault();
+  submitNewStory(evt);
+}
+
+$("#submitForm").on("submit", handleFormSubmission)
