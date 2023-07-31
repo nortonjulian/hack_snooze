@@ -6,7 +6,7 @@ const $body = $("body");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
 const $allStoriesList = $("#all-stories-list");
-const $favoriteStories = $(".star");
+const $favoriteStories = $("#all-stories-list .star");
 const $myStories = $("#my-stories");
 
 const $storiesLists = $(".stories-list");
@@ -31,9 +31,11 @@ function handleFavorite(evt){
   const $star = $(evt.target)
 
   if (currentUser.isFavorite(favorStory)) {
+    console.log("if true")
     currentUser.removeFavorite(favorStory);
     $star.text('add favorite');
   } else {
+    console.log("if false")
     currentUser.addFavorite(favorStory)
     $star.text('⭐️');
   }

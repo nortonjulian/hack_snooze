@@ -11,6 +11,8 @@ async function getAndShowStoriesOnStart() {
   $storiesLoadingMsg.remove();
 
   putStoriesOnPage();
+
+  updateFavoritesTab()
 }
 
 /**

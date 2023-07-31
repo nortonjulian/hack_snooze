@@ -39,6 +39,8 @@ $navLogin.on("click", navLoginClick);
 function navFavoritesClick(evt) {
   console.log("navFavoritesClick", evt);
   hidePageComponents();
+  $allStoriesList.show()
+  $submitForm.show();
 }
 
 $body.on("click", "#nav-favorites", navFavoritesClick)
