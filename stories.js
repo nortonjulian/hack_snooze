@@ -37,29 +37,25 @@ async function submitNewStory(evt){
   $allStoriesList.prepend($story)
 }
 
-$submitForm.on("submit", submitNewStory)
+// $submitForm.on("submit", submitNewStory)
 
+// console.debug("generateStoryMarkup", story);
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
-
   const hostName = story.getHostName();
   const $story = $(`
-      <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
-          ${story.title}
-        </a>
-        <small class="story-hostname">(${hostName})</small>
-        <small class="story-author">by ${story.author}</small>
-        <small class="story-user">posted by ${story.username}</small>
-        <small class="star" id="${story.storyId}">add favorite</small>
-      </li>
-    `);
+    <li id="${story.storyId}">
+      <a href="${story.url}" target="a_blank" class="story-link">
+        ${story.title}
+      </a>
+      <small class="story-hostname">(${hostName})</small>
+      <small class="story-author">by ${story.author}</small>
+      <small class="story-user">posted by ${story.username}</small>
+      <small class="star" id="${story.storyId}">add favorite</small>
+      ${currentUser && currentUser.username === story.username ? '<span class="remove-story">remove</span>' : ''}
+    </li>
+  `);
 
-    if (currentUser && currentUser.ownsStory(story)) {
-      $story.append('<span class="remove-story">remove</span>');
-    }
-
-    return $story;
+  return $story;
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */

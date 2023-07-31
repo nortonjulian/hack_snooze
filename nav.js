@@ -57,6 +57,8 @@ function updateNavOnLogin() {
 }
 
 function showAddStoryForm() {
-  const addStoryForm = document.querySelector('#add-story-form');
-  addStoryForm.style.display = "block";
+  const addStoryForm = document.querySelector('#submitForm');
+  addStoryForm.style.display = "inline-block";
 }
+
+$navSubmitStory.on("click", showAddStoryForm)
