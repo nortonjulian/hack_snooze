@@ -2,12 +2,14 @@
 
 // This is the global list of the stories, an instance of StoryList
 let storyList;
+let oldStoryList;
 
 /** Get and show stories when site first loads. */
 
 async function getAndShowStoriesOnStart() {
-  storyList = await StoryList.getStories();
-  storyList = storyList.stories;
+  oldStoryList = await StoryList.getStories();
+  // storyList = await StoryList.getStories();
+  storyList = oldStoryList.stories;
   $storiesLoadingMsg.remove();
 
   putStoriesOnPage();
@@ -21,21 +23,36 @@ async function getAndShowStoriesOnStart() {
  *
  * Returns the markup for the story.
  */
-async function submitNewStory(evt){
-  evt.preventDefault()
+async function submitNewStory(evt) {
+  evt.preventDefault();
 
-  const title = $("#title").val()
-  const author = $("#author").val()
-  const url = $("#url").val()
-  const username = currentUser.username
-  const storyData = {title, url, author, username}
+  const title = $("#title").val();
+  const author = $("#author").val();
+  const url = $("#url").val();
 
-  const story = await StoryList.addStory(username, storyData)
+  // Validate the URL
+  if (!isValidURL(url)) {
+    console.error("Invalid URL");
+    // You can show an error message to the user indicating that the URL is invalid
+    return;
+  }
 
-  const $story = generateStoryMarkup(story)
+  const username = currentUser.username;
+  const storyData = { title, url, author, username };
 
-  $allStoriesList.prepend($story)
+  // Use the current instance of StoryList (oldStoryList) to add the story
+  const story = await oldStoryList.addStory(username, storyData);
+
+  const $story = generateStoryMarkup(story);
+
+  $allStoriesList.prepend($story);
 }
+
+function isValidURL(url) {
+  return url.startsWith("http://") || url.startsWith("https://");
+}
+
+
 
 // $submitForm.on("submit", submitNewStory)
 

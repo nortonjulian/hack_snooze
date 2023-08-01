@@ -74,21 +74,25 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory(user, {title, author, url} ) {
-    const token = user.loginToken
+  async addStory(user, { title, author, url }) {
+    try {
+      const token = currentUser.loginToken; // Ensure currentUser is defined and has a loginToken
+      const response = await axios({
+        method: "POST",
+        url: `${BASE_URL}/stories`,
+        data: { token, story: { title, author, url } },
+      });
 
-    const response = await axios({
-      method: "POST",
-      url: `${BASE_URL}/stories`,
-      data: { token, story: { title, author, url } }
-    });
+      const story = new Story(response.data.story);
 
-    const story = new Story(response.data.story);
+      this.stories.unshift(story);
+      user.ownStories.unshift(story);
 
-    this.stories.unshift(story)
-    user.ownStories.unshift(story)
-
-    return story
+      return story;
+    } catch (error) {
+      console.error("Error adding story:", error);
+      throw error; // Rethrow the error so it can be caught by the caller
+    }
   }
 }
 
