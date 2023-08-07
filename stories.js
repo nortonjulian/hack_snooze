@@ -26,9 +26,9 @@ async function getAndShowStoriesOnStart() {
 async function submitNewStory(evt) {
   evt.preventDefault();
 
-  const title = $("#title").val();
-  const author = $("#author").val();
-  const url = $("#url").val();
+  const title = $("#titlE").val();
+  const author = $("#authoR").val();
+  const url = $("#urL").val();
 
   // Validate the URL
   if (!isValidURL(url)) {
@@ -135,9 +135,12 @@ $body.on("click", ".star", async function(evt) {
 });
 
 function removeStory(story) {
+  console.log("removeStory")
+  console.log(story)
   storyList = storyList.filter((s) => s.storyId !== story.storyId);
 
   $(`#${story.storyId}`).remove();
 
-  StoryList.removeStory(currentUser, story);
+  // storyList.removeStory(currentUser, story);
+  storyList.addStory()
 }

@@ -79,14 +79,35 @@ class StoryList {
       const token = currentUser.loginToken; // Ensure currentUser is defined and has a loginToken
       const response = await axios({
         method: "POST",
-        url: `${BASE_URL}/stories`,
+        url: `${BASE_URL}/stories/`,
         data: { token, story: { title, author, url } },
       });
 
       const story = new Story(response.data.story);
 
       this.stories.unshift(story);
-      user.ownStories.unshift(story);
+      currentUser.ownStories.unshift(story);
+
+      return story;
+    } catch (error) {
+      console.error("Error adding story:", error);
+      throw error; // Rethrow the error so it can be caught by the caller
+    }
+  }
+
+  async removeStory(user, { storyId }) {
+    try {
+      const token = currentUser.loginToken; // Ensure currentUser is defined and has a loginToken
+      const response = await axios({
+        method: "DELETE",
+        url: `${BASE_URL}/stories/` + storyId,
+        data: { token },
+      });
+
+      const story = new Story(response.data.story);
+
+      this.stories.shift(story);
+      currentUser.ownStories.shift(story);
 
       return story;
     } catch (error) {

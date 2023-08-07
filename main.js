@@ -41,7 +41,6 @@ function handleFavorite(evt){
   }
 }
 
-
 $body.on("click", ".star", handleFavorite)
 
 
