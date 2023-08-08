@@ -6,42 +6,45 @@ const $body = $("body");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
 const $allStoriesList = $("#all-stories-list");
-const $favoriteStories = $("#all-stories-list .star");
-const $myStories = $("#my-stories");
+const $favoritedStories = $("#favorited-stories");
+const $ownStories = $("#my-stories");
 
 const $storiesLists = $(".stories-list");
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
-const $submitForm = $("#submitForm");
 
-const $navSubmitStory = $("#nav-submit-story")
+const $submitForm = $("#submit-form");
+
+const $navSubmitStory = $("#nav-submit-story");
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
+
+const $userProfile = $("#user-profile");
 
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
  * calling this, individual components can re-show just what they want.
  */
 
-function handleFavorite(evt){
-  const favId = evt.target.id
-  const favorStory = storyList.find( s => s.storyId === favId)
-  const $star = $(evt.target)
+// function handleFavorite(evt){
+//   const favId = evt.target.id
+//   const favorStory = storyList.find( s => s.storyId === favId)
+//   const $star = $(evt.target)
 
-  if (currentUser.isFavorite(favorStory)) {
-    console.log("if true")
-    currentUser.removeFavorite(favorStory);
-    $star.text('add favorite');
-  } else {
-    console.log("if false")
-    currentUser.addFavorite(favorStory)
-    $star.text('⭐️');
-  }
-}
+//   if (currentUser.isFavorite(favorStory)) {
+//     console.log("if true")
+//     currentUser.removeFavorite(favorStory);
+//     $star.text('add favorite');
+//   } else {
+//     console.log("if false")
+//     currentUser.addFavorite(favorStory)
+//     $star.text('⭐️');
+//   }
+// }
 
-$body.on("click", ".star", handleFavorite)
+// $body.on("click", ".star", handleFavorite)
 
 
 function hidePageComponents() {
@@ -69,15 +72,15 @@ async function start() {
   }
 }
 
-$body.on("click", ".remove-story", async function(evt) {
-  const $story = $(evt.target).closest("li");
-  const storyId = $story.attr("id");
-  const story = storyList.find((s) => s.storyId === storyId);
+// $body.on("click", ".remove-story", async function(evt) {
+//   const $story = $(evt.target).closest("li");
+//   const storyId = $story.attr("id");
+//   const story = storyList.find((s) => s.storyId === storyId);
 
-  if (story) {
-    await deleteStory(story)
-  }
-});
+//   if (story) {
+//     await deleteStory(story)
+//   }
+// });
 
 // Once the DOM is entirely loaded, begin the app
 

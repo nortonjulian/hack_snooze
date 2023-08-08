@@ -23,19 +23,6 @@ function navSubmitStoryClick(evt) {
 
 $navSubmitStory.on("click", navSubmitStoryClick)
 
-
-/** Show login/signup on click on "login" */
-
-function navLoginClick(evt) {
-  console.debug("navLoginClick", evt);
-  hidePageComponents();
-  $loginForm.show();
-  $signupForm.show();
-
-}
-
-$navLogin.on("click", navLoginClick);
-
 function navFavoritesClick(evt) {
   console.log("navFavoritesClick", evt);
   hidePageComponents();
@@ -45,8 +32,32 @@ function navFavoritesClick(evt) {
 
 $body.on("click", "#nav-favorites", navFavoritesClick)
 
+function navMyStories(evt) {
+  console.debug("navMyStories", evt);
+  hidePageComponents();
+  putUserStoriesOnPage();
+  $ownStories.show();
+}
 
-/** When a user first logins in, update the navbar to reflect that. */
+$body.on("click", "#nav-my-stories", navMyStories);
+
+function navLoginClick(evt) {
+  console.debug("navLoginClick", evt);
+  hidePageComponents();
+  $loginForm.show();
+  $signupForm.show();
+}
+
+$navLogin.on("click", navLoginClick);
+
+function navProfileClick(evt) {
+  console.debug("navProfileClick", evt);
+  hidePageComponents();
+  $userProfile.show();
+}
+
+$navUserProfile.on("click", navProfileClick);
+
 
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
@@ -56,16 +67,16 @@ function updateNavOnLogin() {
   $navUserProfile.text(`${currentUser.username}`).show();
 }
 
-function showAddStoryForm() {
-  const addStoryForm = document.querySelector('#submitForm');
-  addStoryForm.style.display = "inline-block";
-}
+// function showAddStoryForm() {
+//   const addStoryForm = document.querySelector('#submitForm');
+//   addStoryForm.style.display = "inline-block";
+// }
 
-$navSubmitStory.on("click", showAddStoryForm)
+// $navSubmitStory.on("click", showAddStoryForm)
 
-function handleFormSubmission(evt) {
-  evt.preventDefault();
-  submitNewStory(evt);
-}
+// function handleFormSubmission(evt) {
+//   evt.preventDefault();
+//   submitNewStory(evt);
+// }
 
-$("#submitForm").on("submit", handleFormSubmission)
+// $("#submitForm").on("submit", handleFormSubmission)

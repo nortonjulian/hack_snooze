@@ -9,13 +9,12 @@ const BASE_URL = "https://hack-or-snooze-v3.herokuapp.com";
 class Story {
 
   /** Make instance of Story from data object about story:
-   *   - {title, author, url, username, storyId, createdAt}
+   *   - {storyId, title, author, url, username, createdAt}
    */
 
-  constructor({ storyId, title, author, favorites, url, username, createdAt }) {
+  constructor({ storyId, title, author, url, username, createdAt }) {
     this.storyId = storyId;
     this.title = title;
-    this.favorites = favorites;
     this.author = author;
     this.url = url;
     this.username = username;
@@ -25,8 +24,7 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    return new URL(this.url).host;
   }
 }
 
@@ -44,7 +42,7 @@ class StoryList {
    *
    *  - calls the API
    *  - builds an array of Story instances
-   *  - makes a single  instance out of that
+   *  - makes a single StoryList instance out of that
    *  - returns the StoryList instance.
    */
 
@@ -75,25 +73,25 @@ class StoryList {
    */
 
   async addStory(user, { title, author, url }) {
-    try {
-      const token = currentUser.loginToken; // Ensure currentUser is defined and has a loginToken
-      const response = await axios({
-        method: "POST",
-        url: `${BASE_URL}/stories/`,
-        data: { token, story: { title, author, url } },
-      });
+    const token = user.loginToken;
+    const response = await axios({
+      method: "POST",
+      url: `${BASE_URL}/stories`,
+      data: { token, story: { title, author, url } },
+    });
 
-      const story = new Story(response.data.story);
+    const story = new Story(response.data.story);
+    this.stories.unshift(story);
+    user.ownStories.unshift(story);
 
-      this.stories.unshift(story);
-      currentUser.ownStories.unshift(story);
-
-      return story;
-    } catch (error) {
-      console.error("Error adding story:", error);
-      throw error; // Rethrow the error so it can be caught by the caller
-    }
+    return story;
   }
+
+  /** Delete story from API and remove from the story lists.
+   *
+   * - user: the current User instance
+   * - storyId: the ID of the story you want to remove
+   */
 
   async removeStory(user, storyId) {
     const token = user.loginToken;
@@ -157,7 +155,7 @@ class User {
       data: { user: { username, password, name } },
     });
 
-    let { user } = response.data
+    let { user } = response.data;
 
     return new User(
       {
@@ -228,39 +226,40 @@ class User {
     }
   }
 
+  /** Add a story to the list of user favorites and update the API
+   * - story: a Story instance to add to favorites
+   */
+
   async addFavorite(story) {
-    console.log("addFavorite")
+    this.favorites.push(story);
     await this._addOrRemoveFavorite("add", story)
-    this.favorites.push(story)
   }
 
+  /** Remove a story to the list of user favorites and update the API
+   * - story: the Story instance to remove from favorites
+   */
+
   async removeFavorite(story) {
-    console.log("removeFavorite")
-    await this._addOrRemoveFavorite("remove", story)
-    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId)
+    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
+    await this._addOrRemoveFavorite("remove", story);
   }
+
+  /** Update API with favorite/not-favorite.
+   *   - newState: "add" or "remove"
+   *   - story: Story instance to make favorite / not favorite
+   * */
 
   async _addOrRemoveFavorite(newState, story) {
     const method = newState === "add" ? "POST" : "DELETE";
     const token = this.loginToken;
-    console.log(method)
-    console.log(token)
     await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: method,
-      data: { token }
-    })
-  }
-
-  async _removeFavorite(newState, story) {
-    const method = newState === "add" ? "POST" : "DELETE";
-    const token = this.loginToken;
-    await axios({
-      url: `${BASE_URL}/stories/user/${this.username}/favorites/${story.storyId}`,
-      method: method,
-      data: { token }
+      data: { token },
     });
   }
+
+  /** Return true/false if given Story instance is a favorite of this user. */
 
   isFavorite(story) {
     return this.favorites.some(s => (s.storyId === story.storyId));
