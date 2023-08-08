@@ -134,13 +134,15 @@ $body.on("click", ".star", async function(evt) {
   updateFavoritesTab();
 });
 
-function removeStory(story) {
-  console.log("removeStory")
-  console.log(story)
-  storyList = storyList.filter((s) => s.storyId !== story.storyId);
+async function deleteStory(evt) {
+  console.debug("deleteStory");
 
-  $(`#${story.storyId}`).remove();
+  const $closestLi = $(evt.target).closest("li");
+  const storyId = $closestLi.attr("id");
 
-  // storyList.removeStory(currentUser, story);
-  storyList.addStory()
+  await storyList.removeStory(currentUser, storyId);
+
+  await putUserStoriesOnPage();
 }
+
+$ownStories.on("click", ".trash-can", deleteStory);

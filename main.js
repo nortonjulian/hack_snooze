@@ -75,7 +75,7 @@ $body.on("click", ".remove-story", async function(evt) {
   const story = storyList.find((s) => s.storyId === storyId);
 
   if (story) {
-    await removeStory(story)
+    await deleteStory(story)
   }
 });
 

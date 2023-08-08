@@ -95,25 +95,20 @@ class StoryList {
     }
   }
 
-  async removeStory(user, { storyId }) {
-    try {
-      const token = currentUser.loginToken; // Ensure currentUser is defined and has a loginToken
-      const response = await axios({
-        method: "DELETE",
-        url: `${BASE_URL}/stories/` + storyId,
-        data: { token },
-      });
+  async removeStory(user, storyId) {
+    const token = user.loginToken;
+    await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "DELETE",
+      data: { token: user.loginToken }
+    });
 
-      const story = new Story(response.data.story);
+    // filter out the story whose ID we are removing
+    this.stories = this.stories.filter(story => story.storyId !== storyId);
 
-      this.stories.shift(story);
-      currentUser.ownStories.shift(story);
-
-      return story;
-    } catch (error) {
-      console.error("Error adding story:", error);
-      throw error; // Rethrow the error so it can be caught by the caller
-    }
+    // do the same thing for the user's list of stories & their favorites
+    user.ownStories = user.ownStories.filter(s => s.storyId !== storyId);
+    user.favorites = user.favorites.filter(s => s.storyId !== storyId);
   }
 }
 
